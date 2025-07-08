@@ -1,0 +1,29 @@
+body {
+    background-color:#146C80; 
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'MyCustomFont';
+  }
+  @font-face {
+    font-family: 'MyCustomFont';
+    src: url('../fonts/Pacifico-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  .card-gradient {
+    background: linear-gradient(to right, #B99095, #FCB5AC);
+    color: white;
+    border: none;
+  }
+.invalid-feedback{
+  font-family: 'sans-serif';
+  font-weight: bold;
+  font-size: 18px;
+}
+  .form-control {
+    background-color: white !important;
+    color: black !important;
+  }
+  
