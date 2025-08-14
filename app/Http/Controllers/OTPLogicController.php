@@ -31,14 +31,12 @@ public function sendOtp(Request $request)
     ]);
 
     $user = User::where('email', $validated['email'])->first();
-
     if (!$user) {
         // This will rarely happen since `exists` validation handles it
         return redirect()->back()->with('error', 'No user found with this email.');
     }
 
     $otp = $otp = $this->generateOtp(6);
-
     OTP::updateOrCreate(
         ['email' => $user->email],
         [

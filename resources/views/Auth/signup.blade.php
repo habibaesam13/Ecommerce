@@ -10,62 +10,79 @@
   </head>
   <body>
 
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-10 col-lg-7">
-          <div class="card card-gradient p-4 shadow rounded-4">
-            <h3 class="text-center mb-4 customFont">Sign Up</h3>
+    <div class="container ">
+      <div class="row justify-content-center ">
+        <div class=" col-lg-8 ">
+          <div class="card card-gradient shadow rounded-1 overflow-hidden custom-card">
+            <div class="row g-0 h-100">
 
-
-            <form action="{{ route('auth.register') }}" method="POST">
-              @csrf
-
-              {{-- Name --}}
-              <div class="mb-3">
-                <label for="Name" class="form-label">Full Name</label>
-                <input type="text" class="form-control @error('name') is-invalid @enderror" id="Name" name="name" value="{{ old('name') }}" required>
-                @error('name')
-                  <div class="invalid-feedback">
-                    {{ $message }}
-                  </div>
-                @enderror
+              <!-- Left side: Image -->
+              <div class="col-md-6">
+                <img src="images/signup.jpeg" alt="Sign Up Image" class="img-fluid h-100 w-100 object-fit-cover">
               </div>
 
-              {{-- Email --}}
-              <div class="mb-3">
-                <label for="Email" class="form-label">Email address</label>
-                <input type="email" class="form-control @error('email') is-invalid @enderror" id="Email" name="email" value="{{ old('email') }}" required>
-                @error('email')
-                  <div class="invalid-feedback">
-                    {{ $message }}
+              <!-- Right side: Form -->
+              <div class="col-md-6 d-flex flex-column justify-content-center p-5">
+                <h3 class="text-center mb-4 customFont">Sign Up</h3>
+
+                <form action="{{ route('auth.register') }}" method="POST">
+                  @csrf
+
+                  {{-- Name --}}
+                  <div class="mb-3">
+                    <label for="Name" class="form-label">Full Name</label>
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="Name" name="name" value="{{ old('name') }}" required>
+                    @error('name')
+                      <div class="invalid-feedback">
+                        {{ $message }}
+                      </div>
+                    @enderror
                   </div>
-                @enderror
+
+                  {{-- Email --}}
+                  <div class="mb-3">
+                    <label for="Email" class="form-label">Email address</label>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="Email" name="email" value="{{ old('email') }}" required>
+                    @error('email')
+                      <div class="invalid-feedback">
+                        {{ $message }}
+                      </div>
+                    @enderror
+                  </div>
+
+                  {{-- Password --}}
+                  <div class="mb-3">
+                    <label for="Password" class="form-label">Password</label>
+                    <input type="password" class="form-control @error('password') is-invalid @enderror" id="Password" name="password" required>
+                    @error('password')
+                      <div class="invalid-feedback">
+                        {{ $message }}
+                      </div>
+                    @enderror
+                  </div>
+
+                  {{-- Address --}}
+                  <div class="mb-3">
+                    <label for="Address" class="form-label">Address</label>
+                    <input type="text" class="form-control @error('address') is-invalid @enderror" id="Address" name="address" value="{{ old('address') }}" required>
+                    @error('address')
+                      <div class="invalid-feedback">
+                        {{ $message }}
+                      </div>
+                    @enderror
+                  </div>
+
+                  <button type="submit" class="btn btn-light w-100 mt-2">Register</button>
+                </form>
+
+                <!-- Login link -->
+                <div class="register">
+                  <span>Already have an account?</span>
+                  <a href="{{ route('auth.login') }}" class="register-link">Login</a>
+                </div>
               </div>
 
-              {{-- Password --}}
-              <div class="mb-3">
-                <label for="Password" class="form-label">Password</label>
-                <input type="password" class="form-control @error('password') is-invalid @enderror" id="Password" name="password" required>
-                @error('password')
-                  <div class="invalid-feedback">
-                    {{ $message }}
-                  </div>
-                @enderror
-              </div>
-
-              {{-- Address --}}
-              <div class="mb-3">
-                <label for="Address" class="form-label">Address</label>
-                <input type="text" class="form-control @error('address') is-invalid @enderror" id="Address" name="address" value="{{ old('address') }}" required>
-                @error('address')
-                  <div class="invalid-feedback">
-                    {{ $message }}
-                  </div>
-                @enderror
-              </div>
-
-              <button type="submit" class="btn btn-light w-100 mt-2">Register</button>
-            </form>
+            </div>
           </div>
         </div>
       </div>

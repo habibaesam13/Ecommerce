@@ -16,6 +16,7 @@
         </div>
         <div style="display: flex; align-items: center; font-family: Arial, Helvetica, sans-serif;">
             <a href="{{ route('home') }}">Home</a>
+            <a href="#" >Products</a>
             <a href="#">My Orders</a>
             <a href="#">About</a>
             <a href="#">Contact Us</a>
