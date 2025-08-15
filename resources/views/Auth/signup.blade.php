@@ -12,7 +12,7 @@
 
     <div class="container ">
       <div class="row justify-content-center ">
-        <div class=" col-lg-8 ">
+        <div class=" col-lg-9 ">
           <div class="card card-gradient shadow rounded-1 overflow-hidden custom-card">
             <div class="row g-0 h-100">
 

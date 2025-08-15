@@ -1,40 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', config('app.name'))</title>
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    <!-- Font Awesome for icons -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
 
-    <nav>
-        <div>
-            <a href="{{ route('home') }}" style="font-size: 1.2rem; font-weight: bold;">
+    <nav class="navbar">
+        <span class="app-name">
+            <a href="{{ route('home') }}">
                 {{ config('app.name') }}
             </a>
-        </div>
-        <div style="display: flex; align-items: center; font-family: Arial, Helvetica, sans-serif;">
+        </span>
+
+
+        <!-- Nav links -->
+        <div class="nav-links">
             <a href="{{ route('home') }}">Home</a>
-            <a href="#" >Products</a>
+            <a href="#">Products</a>
             <a href="#">My Orders</a>
             <a href="#">About</a>
             <a href="#">Contact Us</a>
-            @auth
-                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                    @csrf
-                    <button type="submit" class="logout-button">Logout</button>
-                </form>
-            @else
-                <a href="{{ route('login') }}">Login</a>
-                <a href="{{ route('register') }}">Register</a>
-            @endauth
+        </div>
+
+        <!-- Search bar -->
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" placeholder="Search..." class="search-input">
+        </div>
+
+
+        <!-- Icons -->
+        <div class="nav-icons">
+            <a href="#"><i class="fas fa-heart"></i></a>
+            <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            <a href="#"><i class="fas fa-user"></i></a>
         </div>
     </nav>
-
-    <div style="padding: 2rem;">
+    <div>
         @yield('content')
     </div>
 
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </html>

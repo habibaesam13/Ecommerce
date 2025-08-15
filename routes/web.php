@@ -1,8 +1,11 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\OTPLogicController;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomePageController;
+use App\Http\Controllers\OTPLogicController;
 
 Route::get('/', function () {
     return view('Auth.login');
@@ -25,26 +28,20 @@ Route::post('/reset-password', [OTPLogicController::class, 'resetPassword'])->na
 
 
 /**                   Authenticated Routes                          */
+    //user Routes
 Route::middleware('auth')->group(function () {
+
     Route::post('/logout', [AuthController::class, 'logout'])->name("logout");
 
-    Route::get("/home-page", function () {
-        return view("mainApp");
-    })->name('home');
+    Route::get("/home-page", [HomePageController::class, 'index'])->name('home');
 
+    Route::get('/category-products/{category}', [CategoryController::class, 'categoryProducts'])->name('category-products');
+});
+//Admin Routes 
+Route::middleware('auth')->prefix('/admin')->group(function () {
 
-
-
-
-
-
-
-    
-    Route::prefix('/admin')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('admin.AdminDashboard');
-        })->name("AdminDashboard");
-    });
-
+    Route::get('/dashboard', function () {
+        return view('admin.AdminDashboard');
+    })->name("AdminDashboard");
 
 });
