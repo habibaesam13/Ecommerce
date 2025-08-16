@@ -8,12 +8,11 @@ class Product extends Model
 {
     protected $fillable=[
         "name",
-        "slug",
         "description",
         "price",
         "stock",
         "img",
-        "discount_price",
+        "discount_amount",
     ];
     public function category()
     {

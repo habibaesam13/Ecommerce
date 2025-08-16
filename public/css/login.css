@@ -1,29 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+*{ font-family: "Luckiest Guy", cursive; }
 body {
-    background-color:#146C80; 
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'MyCustomFont';
-  }
-  @font-face {
-    font-family: 'MyCustomFont';
-    src: url('../fonts/Pacifico-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-  .card-gradient {
-    background: linear-gradient(to right, #B99095, #FCB5AC);
-    color: white;
-    border: none;
-  }
-.invalid-feedback{
-  font-family: 'sans-serif';
-  font-weight: bold;
-  font-size: 18px;
+  background: linear-gradient(to right, #fef5e7 70%, #fcf8f3 50%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-  .form-control {
-    background-color: white !important;
-    color: black !important;
-  }
-  
+
+.card-gradient {
+  background: linear-gradient(to right, #E89F71, #FCB5AC);
+  color: white;
+  border: none;
+}
+.btn{
+  color: #333;
+}
+.custom-card {
+  min-height: 450px;
+}
+
+.object-fit-cover {
+  object-fit: cover;
+}
+
+.form-control {
+  outline: none ;
+  font-family: sans-serif;
+}
+.form-control:focus {
+  box-shadow: none;
+  box-shadow: 2px rgba(0, 123, 255, 0.5) ;
+  border-color: #007bff ;
+}
+
+.register {
+    font-size: 1rem;
+    font-weight: 400;
+    margin-top: 5px;
+    text-align: center;
+}
+.register a {
+    color: #333;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.invalid-feedback {
+    font-size: 0.875rem;
+    font-family: sans-serif;
+}
