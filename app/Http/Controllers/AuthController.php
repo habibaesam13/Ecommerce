@@ -3,26 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
-use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    protected AuthService $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function register(UserRequest $request)
     {
-        $validated =$request->validated();
-        $user = User::create([
-            'name'     => $validated['name'],
-            'email'    => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'address'=>$validated['address'],
-        ]);
+        $user = $this->authService->register($request->validated());
 
-        Auth::login($user);
-        return redirect()->route('home')->with('success', 'User Added successfully');
+        return redirect()->route('home')->with('success', 'User registered successfully');
     }
 
     public function login(Request $request)
@@ -32,24 +29,16 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return Auth::user()->role == "customer"
-        ? redirect()->route("home")->with('success', 'Logged in successfully')
-        : redirect()->route("AdminDashboard");
-        }
+        $user = $this->authService->login($credentials);
 
-        throw ValidationException::withMessages([
-            'email' => 'Invalid credentials.',
-        ]);
+        return $user->role === "customer"
+            ? redirect()->route("home")->with('success', 'Logged in successfully')
+            : redirect()->route("AdminDashboard");
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $this->authService->logout();
 
         return redirect('/login')->with('success', 'Logged out successfully');
     }
