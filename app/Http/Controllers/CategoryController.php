@@ -13,18 +13,7 @@ class CategoryController extends Controller
         $this->categoryService = $categoryService;
     }
     public function index(){
-        $categories = $this->categoryService->getAllCategories();
+        $categories = $this->categoryService->index();
         return view('categories.index', compact('categories'));
     }
-
-public function categoryProducts($categoryId)
-{
-    $category = $this->categoryService->categoryProducts($categoryId);
-
-    return view('products.categoryProducts', [
-        'category' => $category,
-        'products' => $category->products
-    ]);
-}
-
 }

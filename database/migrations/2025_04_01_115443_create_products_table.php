@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string("name")->unique();
             $table->text("description");
-            $table->decimal("price");
-            $table->decimal("discount_amount")->nullable()->min(2);
-            $table->integer("stock");
+            $table->decimal("price", 10, 2)->min(10);
+            $table->decimal("discount_amount", 10, 2)->nullable()->min(0)->max(80)->default(0);
+            $table->integer("stock")->default(0);
             $table->string("img");
             $table->foreignId("category_id")->constrained()->onDelete('cascade');
             $table->timestamps();
@@ -31,4 +31,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('products');
     }
+
+
+    
 };

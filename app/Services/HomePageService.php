@@ -16,6 +16,6 @@ class HomePageService
     }
 
     public function index(){
-        return $this->categoryService->getAllCategories();
+        return $this->categoryService->index();
     }
 }

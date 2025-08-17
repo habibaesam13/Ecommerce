@@ -14,12 +14,14 @@ class CategoryService
         //
     }
 
+    public function show($categoryId)
+    {
+        return Category::find($categoryId);
+    }
 
-    public function getAllCategories(){
+    public function index(){
         return Category::all();
     }
 
-    public function categoryProducts($categoryId){
-        return Category::with('products')->findOrFail($categoryId);
-    }
+
 }

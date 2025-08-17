@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\OTPLogicController;
+use App\Http\Controllers\ProductController;
 use App\Http\Middleware\EnsureSingleSession;
 
 Route::get('/', function () {
@@ -36,7 +37,7 @@ Route::middleware(['auth', 'single.session'])->group(function () {
 
     Route::get("/home-page", [HomePageController::class, 'index'])->name('home');
 
-    Route::get('/category-products/{categoryId}', [CategoryController::class, 'categoryProducts'])->name('category-products');
+    Route::get('/category-products/{categoryId}', [ProductController::class, 'show'])->name('category-products');
 });
 
 //Admin Routes
