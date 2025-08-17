@@ -3,20 +3,28 @@
 namespace App\Services;
 
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class ProductService
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
-    {
-        //
+    public function index($search = null)
+{
+    $query = Product::with('category');
+
+    if ($search) {
+        $query->search($search); 
     }
 
-    public function show($categoryId){
-        // Logic to retrieve products by category ID
-        $products= Product::with('category')->where('category_id', $categoryId)->cursorPaginate(3);
-        return $products;
+    return $query->cursorPaginate(5);
+}
+
+
+
+
+    public function show($categoryId)
+    {
+        return Product::with('category')
+            ->where('category_id', $categoryId)
+            ->cursorPaginate(3);
     }
 }

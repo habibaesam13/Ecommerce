@@ -15,11 +15,9 @@ class EnsureSingleSession
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
-    {
+    public function handle(Request $request, Closure $next): Response {
         if (Auth::check()) {
             $user = Auth::user();
-
             // If the current session is not the same as the one stored in the DB → Logout
             if ($user->session_id !== Session::getId()) {
                 Auth::logout();
@@ -28,7 +26,6 @@ class EnsureSingleSession
                 ]);
             }
         }
-
         return $next($request);
     }
 }

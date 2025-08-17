@@ -1,5 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
 
+/**NeuzeitS new fonts**/
+
+@font-face {
+  font-family: neuzeit s-regular;
+  src: url('https://cdn.shopify.com/s/files/1/0799/4032/1559/files/NeuzeitS-Book.eot');
+  src: url('https://cdn.shopify.com/s/files/1/0799/4032/1559/files/NeuzeitS-Book.eot?#iefix') format('embedded-opentype'), url('https://cdn.shopify.com/s/files/1/0799/4032/1559/files/NeuzeitS-Book.woff2') format('woff2'),
+    url('https://cdn.shopify.com/s/files/1/0799/4032/1559/files/NeuzeitS-Book.woff') format('woff'), url('https://cdn.shopify.com/s/files/1/0799/4032/1559/files/NeuzeitS-Book.ttf') format('truetype'),
+    url('https://cdn.shopify.com/s/files/1/0799/4032/1559/files/NeuzeitS-Book.svg#NeuzeitS-Book') format('svg');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+
 body {
     background: linear-gradient(to right, #fef5e7 70%, #fcf8f3 50%);
     min-height: 100vh;
@@ -38,27 +52,40 @@ body {
     text-decoration: none;
     font-weight: 500;
 }
-
-.search-container {
+.search-form {
     display: flex;
     align-items: center;
-    background: #fff;
-    border-radius: 4px;
-    padding: 5px 10px;
-}
-
-.search-icon {
-    color: #E89F71;
-    margin-right: 8px;
-    font-size: 1rem;
+    margin-top: 3%;
+    height: 36px;
+    background: white; 
+    border-radius: 2px; 
+    overflow: hidden;
 }
 
 .search-input {
-    border: none;
-    outline: none;
-    font-size: 0.9rem;
     flex: 1;
-    padding: 8px 50px;
+    height: 100%;
+    padding: 30px;
+    border: none;       
+    outline: none;       
+    background: inherit;
+    font-size: 14px;
+}
+
+.search-btn {
+    height: 100%;
+    padding: 0 12px;
+    border: none;        
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-btn i {
+    color: #E89F71;        
+    font-size: 16px;
 }
 
 .nav-icons {
@@ -124,6 +151,23 @@ body {
     opacity: 1;
 }
 
+.half-line{
+    width: 25%;
+    height: 1px;
+    display: inline-block;
+    background-color: #E89F71;
+    margin: 0 5%;
+    border: none;
+    border-radius: 5px;
+}
+
+.new-arrivals {
+    text-align: center;
+    margin: 30px 0;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: larger;
+}
+
 .category {
     display: flex;
     flex-wrap: wrap;
@@ -147,4 +191,80 @@ li a {
     text-decoration: none;
     color: #333;
     font-family: 'Luckiest Guy', cursive;
+}
+
+
+.custom-col {
+    flex: 0 0 25%;
+    max-width: 25%;
+}
+
+.custom-col .card-link {
+    text-decoration: none;   /* remove underline */
+    color: inherit;          /* keep original text color */
+    display: block;          /* full block clickable */
+}
+
+.card-link:hover .card {
+    transform: translateY(-3px); /* subtle hover effect */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.custom-col .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 0 4px 0 0;
+}
+
+.custom-col .card-body {
+    padding: 8px;
+    font-family: neuzeit s-regular, sans-serif;
+    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.custom-col .card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.custom-col .card-text {
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+}
+
+.custom-col .btn {
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.custom-col .btn-primary {
+    background: bisque;
+    color: #fff;
+    margin-bottom: 8px; 
+}
+
+.custom-col .btn-primary:hover {
+
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.custom-col .btn-success {
+    background: #E89F71;
+    color: #fff;
+}
+
+.custom-col .btn-success:hover {
+    background: #E89F71;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }

@@ -1,19 +1,18 @@
 @if ($paginator->hasPages())
-    <nav>
-        <ul class="pagination-arrows">
-            {{-- Previous Page Link --}}
-            @if ($paginator->onFirstPage())
-                <li class="disabled"><span>←</span></li>
-            @else
-                <li><a href="{{ $paginator->previousPageUrl() }}" rel="prev">←</a></li>
-            @endif
+<nav>
+    <ul class="pagination justify-content-center">
+        {{-- Previous Page Link --}}
+        <li class="page-item {{ $paginator->onFirstPage() ? 'disabled' : '' }}">
+            <a class="page-link" href="{{ $paginator->previousPageUrl() }}" tabindex="-1" aria-disabled="{{ $paginator->onFirstPage() }}" style="color:green">
+                &laquo;
+            </a>
+        </li>
 
-            {{-- Next Page Link --}}
-            @if ($paginator->hasMorePages())
-                <li><a href="{{ $paginator->nextPageUrl() }}" rel="next">→</a></li>
-            @else
-                <li class="disabled"><span>→</span></li>
-            @endif
-        </ul>
-    </nav>
+        <li class="page-item {{ $paginator->hasMorePages() ? '' : 'disabled' }}" >
+            <a class="page-link" href="{{ $paginator->nextPageUrl() }}" aria-disabled="{{ !$paginator->hasMorePages() }}" style="color:#E89F71">
+                &raquo; 
+            </a>
+        </li>
+    </ul>
+</nav>
 @endif

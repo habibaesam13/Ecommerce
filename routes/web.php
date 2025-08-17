@@ -23,14 +23,14 @@ Route::get("/register", function () {
 Route::post('/register', [AuthController::class, 'register'])->name("auth.register");
 
 /**             Password Reset Routes                   */
-Route::get('/forgetPassword',[OTPLogicController::class,'forgotPassword'])->name('password.forget');
-Route::post("/sendOtp",[OTPLogicController::class,'sendOtp'])->name('sendOtp');
+Route::get('/forgetPassword', [OTPLogicController::class, 'forgotPassword'])->name('password.forget');
+Route::post("/sendOtp", [OTPLogicController::class, 'sendOtp'])->name('sendOtp');
 Route::get('/reset-password', [OTPLogicController::class, 'showResetForm'])->name('password.reset.form');
 Route::post('/reset-password', [OTPLogicController::class, 'resetPassword'])->name('password.reset');
 
 
 /**                   Authenticated Routes                          */
-    //user Routes
+//user Routes
 Route::middleware(['auth', 'single.session'])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name("logout");
@@ -38,6 +38,12 @@ Route::middleware(['auth', 'single.session'])->group(function () {
     Route::get("/home-page", [HomePageController::class, 'index'])->name('home');
 
     Route::get('/category-products/{categoryId}', [ProductController::class, 'show'])->name('category-products');
+
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/product-details/{id}', [ProductController::class, 'details'])->name('product-details');
+
+
+    
 });
 
 //Admin Routes
@@ -46,5 +52,4 @@ Route::middleware(['auth', 'single.session'])->prefix('/admin')->group(function 
     Route::get('/dashboard', function () {
         return view('admin.AdminDashboard');
     })->name("AdminDashboard");
-
 });
