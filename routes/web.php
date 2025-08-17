@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\OTPLogicController;
+use App\Http\Controllers\ProductController;
+use App\Http\Middleware\EnsureSingleSession;
 
 Route::get('/', function () {
     return view('Auth.login');
@@ -29,16 +31,17 @@ Route::post('/reset-password', [OTPLogicController::class, 'resetPassword'])->na
 
 /**                   Authenticated Routes                          */
     //user Routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'single.session'])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name("logout");
 
     Route::get("/home-page", [HomePageController::class, 'index'])->name('home');
 
-    Route::get('/category-products/{category}', [CategoryController::class, 'categoryProducts'])->name('category-products');
+    Route::get('/category-products/{categoryId}', [ProductController::class, 'show'])->name('category-products');
 });
-//Admin Routes 
-Route::middleware('auth')->prefix('/admin')->group(function () {
+
+//Admin Routes
+Route::middleware(['auth', 'single.session'])->prefix('/admin')->group(function () {
 
     Route::get('/dashboard', function () {
         return view('admin.AdminDashboard');
