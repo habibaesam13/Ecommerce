@@ -31,11 +31,18 @@
             <a href="#">Contact Us</a>
         </div>
 
+
         <!-- Search bar -->
         <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" placeholder="Search..." class="search-input">
-        </div>
+    <form action="{{ route('products.index') }}" method="GET" class="search-form">
+        <input type="text" name="q" value="{{ request('q') }}" placeholder="Search..." class="search-input">
+        <button type="submit" class="search-btn">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+</div>
+
+
 
 
         <!-- Icons -->
@@ -51,4 +58,5 @@
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </html>

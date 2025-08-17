@@ -15,6 +15,15 @@ class Product extends Model
         "discount_amount",
         "category_id",
     ];
+public function scopeSearch($query, $search)
+{
+    return $query->where('id', $search)
+        ->orWhere('name', 'like', "%{$search}%")
+        ->orWhere('price', 'like', "%{$search}%")
+        ->orWhereHas('category', function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%");
+        });
+}
 
 
 public function getFinalPriceAttribute()

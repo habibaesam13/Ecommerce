@@ -11,34 +11,6 @@ h2{
     transform: translateY(20%);
     opacity: 0.9;
 }
-/* Custom pagination arrows */
-.pagination-arrows {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
-    gap: 20px;
-}
-
-.pagination-arrows li a,
-.pagination-arrows li span {
-    display: inline-block;
-    font-size: 30px;
-    color: #E89F71; 
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.2s ease;
-}
-
-.pagination-arrows li a:hover {
-    color: #333; 
-}
-
-.pagination-arrows li.disabled span {
-    color: #ccc; 
-    cursor: not-allowed;
-}
 .triangle-discount {
     position: absolute;
     top: 0;
