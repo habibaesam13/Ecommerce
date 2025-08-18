@@ -11,15 +11,15 @@
     </div>
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img src="{{ asset('images/products/5.jpg') }}" class="d-block" alt="Room 1">
+            <img src="{{ asset('images/products/5.jpg') }}" class="d-block" alt="Room 1" loading="lazy">
             <div class="overlay-text">New Arrivals – Shop the Latest Trends</div>
         </div>
         <div class="carousel-item">
-            <img src="{{ asset('images/products/1.jpg') }}" class="d-block" alt="Room 2">
+            <img src="{{ asset('images/products/1.jpg') }}" class="d-block" alt="Room 2" loading="lazy">
             <div class="overlay-text">Bundle & Save – Up to 30% Off Sets</div>
         </div>
         <div class="carousel-item">
-            <img src="{{ asset('images/products/4.jpg') }}" class="d-block" alt="Room 3">
+            <img src="{{ asset('images/products/4.jpg') }}" class="d-block" alt="Room 3" loading="lazy">
             <div class="overlay-text">ALL what you need in the same place</div>
         </div>
     </div>
@@ -34,63 +34,86 @@
 
 
 <section class="new-arrivals">
-    <div class ="half-line"></div>
+    <div class="half-line"></div>
     <span>Discover our New Arrivals</span>
-    <div class ="half-line"></div>
+    <div class="half-line"></div>
 </section>
 
 <section class="products container my-5">
     <div class="row">
         @forelse ($products as $product)
-<div class="col custom-col mb-4">
-    <a href="{{ route('product-details', $product->id) }}" class="card-link">
-        <div class="card h-100 shadow-sm d-flex flex-column">
+        <div class="col custom-col mb-4">
+            <a href="{{ route('product-details', $product->id) }}" class="card-link">
+                <div class="card h-100 shadow-sm d-flex flex-column">
+                    {{-- Favorite Icon --}}
+                    @php
+                    $isFavourite = $userFavourites->contains('id', $product->id);
+                    @endphp
 
-            <div class="position-relative">
-                <img src="{{ asset('storage/'.$product->img) }}"
-                    class="card-img-top"
-                    alt="{{ $product->name }}">
+                    <form action="{{ route('favourites.toggle') }}" method="POST" class="favorite-form">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <button type="submit" class="btn btn-link p-0">
+                            @if($isFavourite)
+                            <i class="fa fa-heart favorite-icon text-danger"></i>
+                            @else
+                            <i class="fa fa-heart favorite-icon text-secondary"></i>
+                            @endif
+                        </button>
+                    </form>
 
-                @if($product->discount_amount > 0)
-                <div class="triangle-discount">
-                    <span>-{{ (int) $product->discount_amount }}%</span>
+
+                    <div class="position-relative">
+                        <img src="{{ asset('storage/'.$product->img) }}"
+                            class="card-img-top"
+                            alt="{{ $product->name }}">
+
+                        @if($product->discount_amount > 0)
+                        <div class="triangle-discount">
+                            <span>-{{ (int) $product->discount_amount }}%</span>
+                        </div>
+                        @endif
+
+                        @if($product->discount_amount > 0)
+                        <div class="triangle-discount">
+                            <span>-{{ (int) $product->discount_amount }}%</span>
+                        </div>
+                        @endif
+                    </div>
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ $product->name }}</h5>
+                        <p class="card-text text-muted mb-2">
+                            {{ Str::limit($product->description, 80) }}
+                        </p>
+
+                        @if($product->discount_amount > 0)
+                        <p class="mb-1 text-muted text-decoration-line-through">
+                            ${{ number_format($product->price, 2) }}
+                        </p>
+                        <p class="fw-bold text-success fs-5">
+                            ${{ number_format($product->final_price, 2) }}
+                        </p>
+                        @else
+                        <p class="fw-bold text-success fs-5">
+                            ${{ number_format($product->price, 2) }}
+                        </p>
+                        @endif
+
+                        <p class="text-muted mb-2">
+                            Stock: {{ $product->stock > 0 ? $product->stock : 'Out of stock' }}
+                        </p>
+
+                        <div class="mt-auto">
+                            <a href="#" class="btn btn-primary btn-sm w-100">Add to Cart</a>
+                        </div>
+                    </div>
                 </div>
-                @endif
-            </div>
-
-            <div class="card-body d-flex flex-column">
-                <h5 class="card-title">{{ $product->name }}</h5>
-                <p class="card-text text-muted mb-2">
-                    {{ Str::limit($product->description, 80) }}
-                </p>
-
-                @if($product->discount_amount > 0)
-                <p class="mb-1 text-muted text-decoration-line-through">
-                    ${{ number_format($product->price, 2) }}
-                </p>
-                <p class="fw-bold text-success fs-5">
-                    ${{ number_format($product->final_price, 2) }}
-                </p>
-                @else
-                <p class="fw-bold text-success fs-5">
-                    ${{ number_format($product->price, 2) }}
-                </p>
-                @endif
-
-                <p class="text-muted mb-2">
-                    Stock: {{ $product->stock > 0 ? $product->stock : 'Out of stock' }}
-                </p>
-
-                <div class="mt-auto"> 
-                    <a href="#" class="btn btn-primary btn-sm w-100">Add to Cart</a>
-                </div>
-            </div>
+            </a>
         </div>
-    </a>
-</div>
-@empty
-<p class="text-center">No products found in this category.</p>
-@endforelse
+        @empty
+        <p class="text-center">No products found in this category.</p>
+        @endforelse
 
 
         <!-- Pagination links -->

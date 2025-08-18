@@ -6,9 +6,9 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Services\ProductService;
 use App\Services\CategoryService;
-
 class ProductController extends Controller
 {
+
     private ProductService $productService;
     private CategoryService $categoryService;
 
@@ -21,14 +21,15 @@ class ProductController extends Controller
     public function index(Request $request, ProductService $service)
     {
         $products = $service->index($request->q);
-
         return view('products.index', compact('products'));
     }
 
 
     public function details($id)
     {
+       
         $product = Product::with('category')->findOrFail($id);
+
         return view('products.product', compact('product'));
     }
 
@@ -36,7 +37,6 @@ class ProductController extends Controller
     public function show($categoryId)
     {
         $category = $this->categoryService->show($categoryId);
-
         if (! $category) {
             abort(404, 'Category not found');
         }

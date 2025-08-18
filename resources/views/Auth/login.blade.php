@@ -51,7 +51,7 @@
 
             <!-- Right side: Image -->
             <div class="col-md-6">
-              <img src="images/login.jpg" alt="Login Image" class="img-fluid h-100 w-100 object-fit-cover">
+              <img src="images/login.jpg" alt="Login Image" class="img-fluid h-100 w-100 object-fit-cover" loading="lazy">
             </div>
 
 

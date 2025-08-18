@@ -48,4 +48,9 @@ public function getFinalPriceAttribute()
     {
         return $this->hasMany(OrderItems::class);
     }
+
+    public function favourites()
+    {
+        return $this->hasMany(Favourite::class);
+    }
 }
