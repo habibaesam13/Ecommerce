@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Services\CategoryService;
+
 class CategoryController extends Controller
 {
+
+
     private CategoryService $categoryService;
 
     public function __construct(CategoryService $categoryService){

@@ -15,7 +15,7 @@ class HomePageController extends Controller
     public function index(){
         $categories = $this->homePageService->index()['categories'];
         $products = $this->homePageService->index()['products'];
-
-        return view('mainApp', compact('categories','products'));
+        $userFavourites = $this->homePageService->index()['favourites'];
+        return view('mainApp', compact('categories','products', 'userFavourites'));
     }
 }

@@ -3,11 +3,12 @@
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\OTPLogicController;
-use App\Http\Controllers\ProductController;
 use App\Http\Middleware\EnsureSingleSession;
+use App\Http\Controllers\FavouriteController;
 
 Route::get('/', function () {
     return view('Auth.login');
@@ -42,6 +43,9 @@ Route::middleware(['auth', 'single.session'])->group(function () {
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/product-details/{id}', [ProductController::class, 'details'])->name('product-details');
 
+
+    Route::get('/favourites', [FavouriteController::class, 'index'])->name('favourites.index');
+    Route::post('/favourites/toggle', [FavouriteController::class, 'toggle'])->name('favourites.toggle');
 
     
 });

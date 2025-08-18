@@ -119,7 +119,6 @@ body {
     border-radius: 4px;
 }
 
-/* Overlay covering the image exactly */
 .carousel-item {
     position: relative;
 }
@@ -168,6 +167,27 @@ body {
     font-size: larger;
 }
 
+.favorite-form {
+    position: absolute;
+    z-index: 10;
+}
+.favorite-icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    border-radius: 50%;
+    padding: 6px 8px;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    z-index: 2;
+    text-decoration: none;
+}
+.favorite-icon.text-secondary {
+    color: #FFF !important;
+}
+
+
+
 .category {
     display: flex;
     flex-wrap: wrap;
@@ -200,13 +220,13 @@ li a {
 }
 
 .custom-col .card-link {
-    text-decoration: none;   /* remove underline */
-    color: inherit;          /* keep original text color */
-    display: block;          /* full block clickable */
+    text-decoration: none;   
+    color: inherit;          
+    display: block;          
 }
 
 .card-link:hover .card {
-    transform: translateY(-3px); /* subtle hover effect */
+    transform: translateY(-3px); 
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
@@ -238,33 +258,24 @@ li a {
 
 .custom-col .btn {
     border: none;
-    border-radius: 5px;
+    border-radius: 2px;
     padding: 8px 15px;
     font-size: 0.85rem;
-    font-weight: 600;
+    color: #333;
+    font-weight: 900;
     text-transform: uppercase;
     transition: all 0.3s ease;
 }
 
 .custom-col .btn-primary {
     background: bisque;
-    color: #fff;
     margin-bottom: 8px; 
 }
 
 .custom-col .btn-primary:hover {
-
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-.custom-col .btn-success {
     background: #E89F71;
     color: #fff;
-}
-
-.custom-col .btn-success:hover {
-    background: #E89F71;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
+

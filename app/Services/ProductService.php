@@ -17,9 +17,13 @@ class ProductService
 
     return $query->cursorPaginate(5);
 }
-
-
-
+public function newArrivals()
+{
+    return Product::with('category')
+        ->orderBy('created_at', 'desc')
+        ->orderBy('id', 'desc')
+        ->cursorPaginate(5);
+}
 
     public function show($categoryId)
     {
