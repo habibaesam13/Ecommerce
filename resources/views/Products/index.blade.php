@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title', 'Products - ' . config('app.name'))
-
+<link href="{{ asset('css/products.css') }}" rel="stylesheet">
 @section('content')
 <div class="container py-5">
 

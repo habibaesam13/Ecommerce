@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Services\ProductService;
 use App\Services\CategoryService;
+
 class ProductController extends Controller
 {
 
@@ -27,10 +28,16 @@ class ProductController extends Controller
 
     public function details($id)
     {
-       
-        $product = Product::with('category')->findOrFail($id);
 
-        return view('products.product', compact('product'));
+        $product = Product::with('category')->findOrFail($id);
+        $categoryName = $product->category->name;
+        $user = auth()->user();
+
+        $isFav = false;
+        if ($user) {
+            $isFav = $user->favourites()->where('product_id', $id)->exists();
+        }
+        return view('products.product', compact('product', 'isFav', 'categoryName'));
     }
 
 

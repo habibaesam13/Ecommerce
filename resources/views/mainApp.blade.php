@@ -49,7 +49,6 @@
                     @php
                     $isFavourite = $userFavourites->contains('id', $product->id);
                     @endphp
-
                     <form action="{{ route('favourites.toggle') }}" method="POST" class="favorite-form">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">

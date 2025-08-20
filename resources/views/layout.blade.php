@@ -25,7 +25,7 @@
         <!-- Nav links -->
         <div class="nav-links">
             <a href="{{ route('home') }}">Home</a>
-            <a href="#">Products</a>
+            <a href="{{ route('products.index') }}">Products</a>
             <a href="#">My Orders</a>
             <a href="#">About</a>
             <a href="#">Contact Us</a>
