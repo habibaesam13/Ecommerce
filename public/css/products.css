@@ -1,15 +1,23 @@
-h2{
+h2 {
     font-family: 'Luckiest Guy', cursive;
 }
+
+.card * {
+    font-family: "Neuzeit S-regular", sans-serif;
+    font-weight: bold;
+}
+
 .featured-card {
     z-index: 2;
     border: 2px solid #ff4d4d;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
+
 .normal-card {
     transform: translateY(20%);
     opacity: 0.9;
 }
+
 .triangle-discount {
     position: absolute;
     top: 0;
@@ -17,16 +25,16 @@ h2{
     width: 0;
     height: 0;
     border-radius: 0 4px 0 0;
-    border-top: 80px solid #dc3545; 
+    border-top: 80px solid #dc3545;
     border-left: 80px solid transparent;
     z-index: 2;
 }
 
 .triangle-discount span {
-      position: absolute;
-    top: -65px; 
-    right: 5px; 
-    transform: rotate(45deg); 
+    position: absolute;
+    top: -65px;
+    right: 5px;
+    transform: rotate(45deg);
     color: #fff;
     font-weight: bold;
     font-size: 0.85rem;
@@ -37,4 +45,188 @@ h2{
 
 .text-decoration-line-through {
     color: #888;
+}
+
+
+.product-colors {
+    margin-top: 15px;
+    margin-left: 3%;
+    font-family: 'Luckiest Guy', cursive;
+}
+
+.product-colors ul {
+    display: flex;
+    gap: 1px;
+    padding: 0;
+    margin: 0;
+}
+
+.product-colors li:nth-child(1) {
+    background-color: #724935;
+    border: none;
+    width: 15px;
+    height: 15px;
+}
+
+.product-colors li:nth-child(2) {
+    background-color: #8D5E2F;
+    border: none;
+    border-radius: 0;
+    width: 15px;
+    height: 15px;
+}
+
+.product-colors li:nth-child(3) {
+    background-color: #bd8E4A;
+    border: none;
+    border-radius: 0;
+    width: 15px;
+    height: 15px;
+}
+
+.product-colors li:nth-child(4) {
+    background-color: #6B5F4E;
+    border: none;
+    border-radius: 0;
+    width: 15px;
+    height: 15px;
+}
+
+.product-colors li:nth-child(5) {
+    background-color: #A8A8A8;
+    border: none;
+    border-radius: 0;
+    width: 15px;
+    height: 15px;
+}
+
+.card {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.category-name {
+    font-family: "Neuzeit S-regular", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 3px 8px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 5px;
+}
+
+.category-name a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.2s ease, border-bottom 0.2s ease;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+}
+
+.stock {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.btn.increase,
+.btn.decrease {
+    background-color: #000000;
+    border: 0px solid #ccc;
+    color: white;
+    font-weight: bold;
+}
+
+.btn.increase:hover,
+.btn.decrease:hover {
+    background-color: #000000;
+    color: white;
+}
+
+.btn.cart {
+    background-color: black;
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 25px;
+}
+
+.btn.cart:hover {
+    background-color: #333;
+    color: white;
+}
+
+.btn.products {
+    font-weight: bold;
+    border: black 1px solid;
+    border-radius: 25px;
+}
+
+.btn.products:hover {
+    background-color: #c0bebc;
+    color: black;
+}
+
+
+.shipping-card {
+    max-width: 100%;
+    margin: 2% 0;
+    border: none;
+    border-radius: 20%;
+    padding: 15px;
+    background-color: transparent;
+}
+
+.card-header {
+    padding: 1.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.shipping-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.shipping-item {
+    display: flex;
+    align-items: center;
+}
+
+.icon-circle {
+    width: 45px;
+    height: 45px;
+    background-color: #f8f9fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    border: 2px solid #e9ecef;
+}
+
+.shipping-content {
+    flex: 1;
+}
+
+.shipping-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.shipping-value {
+    color: #212529;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.chevron-icon {
+    color: #6c757d;
+    font-size: 1.2rem;
+    cursor: pointer;
 }
