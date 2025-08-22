@@ -4,7 +4,7 @@
 @section('content')
 <div class="container my-1">
     <div class="row g-1">
-        <div class="col-md-6 d-flex  align-items-end">
+        <div class="col-md-6 d-flex  align-items-center justify-content-center">
             <div class="position-relative w-50">
 
                 {{-- Favourite Button --}}
