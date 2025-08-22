@@ -1,5 +1,5 @@
 @extends('layout')
-<link rel="stylesheet" href="{{ asset('css/products.css') }}">
+<link rel="stylesheet" href="{{ asset('css/favourite.css') }}">
 @section('title', $category->name . ' - ' . config('app.name'))
 
 @section('content')
@@ -7,14 +7,10 @@
     <h2 class="mb-4 text-center">{{ $category->name }}</h2>
     <div class="row">
         @forelse ($products as $product)
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm position-relative {{ ($loop->iteration % 3 == 2) ? 'featured-card' : 'normal-card' }}">
-
-                <div class="position-relative">
-                    <img src="{{ asset('storage/'.$product->img) }}" 
-                         class="card-img-top" 
-                         alt="{{ $product->name }}">
-
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="product-card">
+                <div class="product-img-wrapper">
+                    <img src="{{ asset('storage/'.$product->img) }}" alt="{{ $product->name }}" loading="lazy">
                     @if($product->discount_amount > 0)
                         <div class="triangle-discount">
                             <span>-{{ (int) $product->discount_amount }}%</span>
@@ -23,38 +19,34 @@
                 </div>
 
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{ $product->name }}</h5>
+                    <h6 class="card-title">{{ $product->name }}</h6>
                     <p class="card-text text-muted mb-2">
                         {{ Str::limit($product->description, 80) }}
                     </p>
 
-                    @if($product->discount_amount > 0)
-                        <p class="mb-1 text-muted text-decoration-line-through">
-                            ${{ number_format($product->price, 2) }}
-                        </p>
-                        <p class="fw-bold text-success fs-5">
-                            ${{ number_format($product->final_price, 2) }}
-                        </p>
-                    @else
-                        <p class="fw-bold text-success fs-5">
-                            ${{ number_format($product->price, 2) }}
-                        </p>
-                    @endif
+                    <div class="wishlist-price d-flex align-items-center gap-2">
+                        @if($product->discount_amount > 0)
+                            <span class="old-price">${{ number_format($product->price, 2) }}</span>
+                            <span class="new-price">${{ number_format($product->final_price, 2) }}</span>
+                        @else
+                            <span class="new-price">${{ number_format($product->price, 2) }}</span>
+                        @endif
+                    </div>
 
-                    <p class="text-muted mb-2">
-                        Stock: {{ $product->stock > 0 ? $product->stock : 'Out of stock' }}
+                    <p class="stock">
+                        {{ $product->stock > 0 ? 'In stock - ready to ship' : 'Out of stock' }}
                     </p>
+
+                    {{-- Action Button --}}
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="#" class="btn cart w-50">Add to Cart</a>
+                    </div>
                 </div>
             </div>
         </div>
         @empty
-        <p class="text-center">No products found in this category.</p>
+        <p class="text-center">No products available.</p>
         @endforelse
-
-        <!-- Pagination links -->
-        <div class="mt-4 d-flex justify-content-center custom-pagination">
-            {{ $products->links('vendor.pagination.arrows') }}
-        </div>
     </div>
 </div>
 @endsection
