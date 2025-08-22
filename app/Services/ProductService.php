@@ -15,7 +15,7 @@ class ProductService
         $query->search($search); 
     }
 
-    return $query->cursorPaginate(5);
+    return $query->cursorPaginate(8);
 }
 public function newArrivals()
 {

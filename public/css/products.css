@@ -1,7 +1,12 @@
 h2 {
     font-family: 'Luckiest Guy', cursive;
 }
-
+h6{
+    font-family: 'Neuzeit S-regular', sans-serif;
+    text-transform: capitalize;
+    font-weight: bold !important;
+    color: #212529;
+}
 .card * {
     font-family: "Neuzeit S-regular", sans-serif;
     font-weight: bold;
