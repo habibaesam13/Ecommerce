@@ -1,21 +1,25 @@
-h2{
+h2 {
     font-family: 'Luckiest Guy', cursive;
 }
-h6{
+h6 {
     font-family: 'Neuzeit S-regular';
     text-transform: capitalize;
     font-weight: bold !important;
 }
 
+/* ====== Product Card ====== */
 .product-card {
     background-color: #fff;
-    padding: 2% 2% 4% 2%;
+    padding: 2% 2% 5% 2%;
     margin: auto;
     box-shadow: #ddd 0 2px 5px;
     border-radius: 5px;
-    position: relative; 
+    position: relative;
     height: 100%;
     transition: 0.3s ease;
+
+    display: flex;
+    flex-direction: column; 
 }
 .product-card:hover {
     box-shadow: #aaa 0 4px 10px;
@@ -23,8 +27,12 @@ h6{
 }
 
 .product-img-wrapper {
-    position: relative; 
+    position: relative;
     overflow: hidden;
+}
+.text-decoration-none {
+    text-decoration: none;
+    color: #000;
 }
 .product-card img {
     width: 100%;
@@ -32,6 +40,7 @@ h6{
     object-fit: cover;
 }
 
+/* ====== Discount Corner ====== */
 .triangle-discount {
     position: absolute;
     top: 0;
@@ -52,16 +61,18 @@ h6{
     font-size: 0.8rem;
     z-index: 3;
 }
-.card-title{
-    margin-top: 2px;
+
+/* ====== Text Styles ====== */
+.card-title {
+    margin-top: 4px;
     margin-left: 2px;
 }
-.card-text{
+.card-text {
     font-size: 0.9rem;
     margin-left: 2px;
     margin-top: 2px;
     color: #555;
-    font-family: 'Neuzeit S-regular',sans-serif;
+    font-family: 'Neuzeit S-regular', sans-serif;
 }
 .old-price {
     text-decoration: line-through;
@@ -69,7 +80,6 @@ h6{
     font-size: 0.9rem;
     margin-left: 2px;
 }
-
 .new-price {
     font-size: 1.1rem;
     font-weight: bold;
@@ -81,27 +91,41 @@ h6{
     margin-left: 2px;
     margin-top: 2px;
     color: #28a745;
-    font-family: 'Neuzeit S-regular',sans-serif;
+    font-family: 'Neuzeit S-regular', sans-serif;
 }
+
+/* ====== Card Body & Button ====== */
+.card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1; 
+}
+.card-body .d-flex.justify-content-center {
+    margin-top: auto; 
+}
+
 .btn.cart {
-    background-color: black;
+    background: black;
     color: white;
     border: none;
     font-weight: bold;
     border-radius: 25px;
+    padding: 8px 15px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
 }
-
 .btn.cart:hover {
-    background-color: #333;
+    background: #333;
     color: white;
 }
 
+/* ====== Secondary Button ====== */
 .btn.products {
     font-weight: bold;
     border: black 1px solid;
     border-radius: 25px;
 }
-
 .btn.products:hover {
     background-color: #c0bebc;
     color: black;
