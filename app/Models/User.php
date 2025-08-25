@@ -54,10 +54,6 @@ public function getShortNameAttribute()
 }
 
 
-    protected function Order(){
-        return $this->hasMany(Order::class);
-    }
-
     public function favourites()
     {
         return $this->hasMany(Favourite::class);

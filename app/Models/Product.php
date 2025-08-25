@@ -44,10 +44,6 @@ public function getFinalPriceAttribute()
     {
         return $this->belongsTo(Category::class);
     }
-    public function orderItems()
-    {
-        return $this->hasMany(OrderItems::class);
-    }
 
     public function favourites()
     {
