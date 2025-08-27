@@ -57,7 +57,7 @@
 
                         {{-- Action Button --}}
                         <div class="d-flex justify-content-center gap-2">
-                            <a href="#" class="btn cart w-50">Add to Cart</a>
+                            <a href="{{ route('product-details', $product->id) }}" class="btn cart w-50">Add to Cart</a>
                         </div>
                     </div>
                 </div>

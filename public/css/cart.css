@@ -1,0 +1,104 @@
+.cart-page h2 {
+    font-family: 'Luckiest Guy', cursive;
+    text-align: center;
+    letter-spacing: 1px;
+}
+.empty-cart{
+
+    border: none ;
+    border-radius: 12px;
+    margin-top: 2% !important;
+    padding: 2%;
+}
+.empty-cart i {
+    font-size: 6rem;
+    color: #000000;
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 50%;
+}
+.empty-cart i {
+    animation: bounce 1.5s infinite;
+}
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+.empty-cart p{
+    font-family: 'neuzeit s-regular', sans-serif;
+}
+.empty-cart a{
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: bold;
+    font-family: 'neuzeit s-regular', sans-serif;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-dark {
+    background-color: #111 !important;
+    border: none;
+}
+.btn-outline-dark {
+    border-radius: 30px;
+    padding: 15px 15px;
+}
+.hurry{
+    font-weight: bold;
+    font-size: 0.9em;
+    font-family: 'neuzeit s-regular', sans-serif;
+    margin-top: 2%;
+}
+.cart-items {
+    border-top: 2px solid #000000; 
+}
+.cart-items .cart-item {
+    border-bottom: 2px solid #000000;
+    padding: 20px 0;
+    margin: 0;
+}
+
+.product-name{
+    font-family: 'neuzeit s-regular', sans-serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #333;
+}
+.badge{
+    background-color: rgba(252, 252, 252, 0.795);
+    display: flex;
+    margin-left: 5px;
+    padding: 15px 15px;
+}
+.badge a{
+    text-decoration: none;
+    color: #E89F71;
+    font-weight: bold;
+    font-family: 'neuzeit s-regular', sans-serif;
+    transition: all 0.3s ease-in-out;
+
+}
+
+.cart-item-img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+.custom-btn{
+    background-color: #000000;
+    color: #fff;
+    border: none;
+    border-radius: 10px !important;
+    padding: 8px 16px;
+}
+.form-control{
+    background-color: transparent !important;
+    border: none !important;
+    font-weight: bold !important;
+}
+.summary-card {
+    background: #fff;
+    border: 1px solid #eee;
+}
+
