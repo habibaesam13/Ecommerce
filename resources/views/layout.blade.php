@@ -48,7 +48,7 @@
         <!-- Icons -->
         <div class="nav-icons">
             <a href="{{ route('favourites.index') }}"><i class="fas fa-heart"></i></a>
-            <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            <a href="{{ route('cart.index') }}"><i class="fas fa-shopping-cart"></i></a>
             <a href="#"><i class="fas fa-user"></i> <span>{{ Auth::user()->short_name}}</span></a>
         </div>
     </nav>

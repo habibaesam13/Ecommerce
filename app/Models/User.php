@@ -58,4 +58,10 @@ public function getShortNameAttribute()
     {
         return $this->hasMany(Favourite::class);
     }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
+
 }

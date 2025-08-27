@@ -94,68 +94,70 @@
                         {{-- Quantity Selector --}}
                         <div class="d-flex  mb-3">
                             <button class="btn decrease px-3" type="button" onclick="decreaseQty()">-</button>
-                            <input id="quantity" type="text" value="1" readonly class="form-control text-center mx-2" style="width:60px;background-color: transparent;border: none;font-weight: bold;">
+                            <input id="quantity" name="quantity" type="text" value="1" readonly class="form-control text-center mx-2" style="width:60px;background-color: transparent;border: none;font-weight: bold;">
                             <button class="btn increase px-3" type="button" onclick="increaseQty({{ $product->stock }})">+</button>
                         </div>
 
                         {{-- Action Buttons --}}
                         <div class="d-flex justify-content-center gap-2" style="margin-top: 5%;">
-                            <a href="#" class="btn cart w-50">Add to Cart</a>
-                            <a href="{{ route('products.index') }}" class="btn products  w-50">
+                            <form action="{{ route('cart.add', $product->id) }}" method="POST" class="w-50">
+                                @csrf
+                                <input type="hidden" id="finalQuantity" name="quantity" value="1">
+                                <button type="submit" class="btn cart w-100">Add to Cart</button>
+                            </form>
+
+                            <a href="{{ route('products.index') }}" class="btn products w-50">
                                 Back to Products
                             </a>
                         </div>
+                    </div>
 
-
-                        <div class="container2">
-                            <div class="card shipping-card">
-                                <div class=" d-flex justify-content-between align-items-center">
-                                    <h5 style="font-weight: bold;margin: 15px 0 0 15px;">Shipping</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="shipping-grid">
-                                        <div class="shipping-item">
-                                            <div class="icon-circle">
-                                                <i class="fas fa-percentage text-muted"></i>
-                                            </div>
-                                            <div class="shipping-content">
-                                                <div class="shipping-label">Discount</div>
-                                                <p class="shipping-value">Disc 50%</p>
-                                            </div>
+                    <div class="container2">
+                        <div class="card shipping-card">
+                            <div class=" d-flex justify-content-between align-items-center">
+                                <h5 style="font-weight: bold;margin: 15px 0 0 15px;">Shipping</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="shipping-grid">
+                                    <div class="shipping-item">
+                                        <div class="icon-circle">
+                                            <i class="fas fa-percentage text-muted"></i>
                                         </div>
-                                        <div class="shipping-item">
-                                            <div class="icon-circle">
-                                                <i class="fas fa-percentage text-muted"></i>
-                                            </div>
-                                            <div class="shipping-content">
-                                                <div class="shipping-label">Package</div>
-                                                <p class="shipping-value">Reg</p>
-                                            </div>
+                                        <div class="shipping-content">
+                                            <div class="shipping-label">Discount</div>
+                                            <p class="shipping-value">Disc 50%</p>
                                         </div>
-                                        <div class="shipping-item">
-                                            <div class="icon-circle">
-                                                <i class="fas fa-percentage text-muted"></i>
-                                            </div>
-                                            <div class="shipping-content">
-                                                <div class="shipping-label">Delivery Time</div>
-                                                <p class="shipping-value">3-4 Working Days</p>
-                                            </div>
+                                    </div>
+                                    <div class="shipping-item">
+                                        <div class="icon-circle">
+                                            <i class="fas fa-percentage text-muted"></i>
                                         </div>
-                                        <div class="shipping-item">
-                                            <div class="icon-circle">
-                                                <i class="fas fa-percentage text-muted"></i>
-                                            </div>
-                                            <div class="shipping-content">
-                                                <div class="shipping-label">Arrive</div>
-                                                <p class="shipping-value">0 - 12 Oct 2025</p>
-                                            </div>
+                                        <div class="shipping-content">
+                                            <div class="shipping-label">Package</div>
+                                            <p class="shipping-value">Reg</p>
+                                        </div>
+                                    </div>
+                                    <div class="shipping-item">
+                                        <div class="icon-circle">
+                                            <i class="fas fa-percentage text-muted"></i>
+                                        </div>
+                                        <div class="shipping-content">
+                                            <div class="shipping-label">Delivery Time</div>
+                                            <p class="shipping-value">3-4 Working Days</p>
+                                        </div>
+                                    </div>
+                                    <div class="shipping-item">
+                                        <div class="icon-circle">
+                                            <i class="fas fa-percentage text-muted"></i>
+                                        </div>
+                                        <div class="shipping-content">
+                                            <div class="shipping-label">Arrive</div>
+                                            <p class="shipping-value">0 - 12 Oct 2025</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -167,15 +169,21 @@
 <script>
     function increaseQty(maxStock) {
         let qty = document.getElementById("quantity");
-        if (parseInt(qty.value) < maxStock) {
-            qty.value = parseInt(qty.value) + 1;
+        let finalInput = document.getElementById("finalQuantity");
+        let current = parseInt(qty.value);
+        if (current < maxStock) {
+            qty.value = current + 1;
+            finalInput.value = current + 1;
         }
     }
 
     function decreaseQty() {
         let qty = document.getElementById("quantity");
-        if (parseInt(qty.value) > 1) {
-            qty.value = parseInt(qty.value) - 1;
+        let finalInput = document.getElementById("finalQuantity");
+        let current = parseInt(qty.value);
+        if (current > 1) {
+            qty.value = current - 1;
+            finalInput.value = current - 1;
         }
     }
 </script>

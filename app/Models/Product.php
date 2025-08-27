@@ -49,4 +49,8 @@ public function getFinalPriceAttribute()
     {
         return $this->hasMany(Favourite::class);
     }
+    public function cartItems()
+    {
+        return $this->hasMany(CartItem::class);
+    }
 }

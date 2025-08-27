@@ -1,4 +1,3 @@
-
 .triangle-discount {
     position: absolute;
     top: 0;
@@ -23,11 +22,9 @@
     white-space: nowrap;
 }
 
-
 .text-decoration-line-through {
     color: #888;
 }
-
 
 .product-colors {
     margin-top: 15px;
@@ -81,7 +78,6 @@
     height: 15px;
 }
 
-
 .category-name {
     font-family: "Neuzeit S-regular", sans-serif;
     font-size: 0.9rem;
@@ -99,16 +95,15 @@
     border-bottom: 2px solid transparent;
     padding-bottom: 2px;
 }
-.btn.increase,
-.btn.decrease {
+
+.btn.increase, .btn.decrease {
     background-color: #000000;
     border: 0px solid #ccc;
     color: white;
     font-weight: bold;
 }
 
-.btn.increase:hover,
-.btn.decrease:hover {
+.btn.increase:hover, .btn.decrease:hover {
     background-color: #000000;
     color: white;
 }
@@ -119,6 +114,13 @@
     border: none;
     font-weight: bold;
     border-radius: 25px;
+    /* Ensure consistent button sizing */
+    height: 44px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .btn.cart:hover {
@@ -130,13 +132,20 @@
     font-weight: bold;
     border: black 1px solid;
     border-radius: 25px;
+    /* Ensure consistent button sizing */
+    height: 44px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-sizing: border-box;
 }
 
 .btn.products:hover {
     background-color: #c0bebc;
     color: black;
 }
-
 
 .shipping-card {
     max-width: 100%;
