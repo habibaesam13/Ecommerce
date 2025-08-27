@@ -209,3 +209,17 @@
     font-size: 1.2rem;
     cursor: pointer;
 }
+.btn.cart {
+    background: black;
+    border: none;
+    font-weight: bold;
+    border-radius: 25px;
+    padding: 8px 15px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+}
+.btn.cart:hover {
+    background: #333;
+    color: white;
+}

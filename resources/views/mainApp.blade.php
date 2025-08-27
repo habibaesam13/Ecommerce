@@ -104,7 +104,7 @@
                         </p>
 
                         <div class="mt-auto">
-                            <a href="#" class="btn btn-primary btn-sm w-100">Add to Cart</a>
+                            <a href="{{ route('product-details', $product->id) }}" class="btn cart w-100" style="color: white;">Add to Cart</a>
                         </div>
                     </div>
                 </div>

@@ -4,148 +4,153 @@ namespace App\Services;
 
 use App\Models\Cart;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 
 class CartService
 {
     /**
-     * Get or create a cart for user
+     * Get or create a cart for a user (with items + products eager loaded).
      */
-    public function getUserCart(int $userId)
+    public function getUserCart(int $userId): Cart
     {
-        return Cart::firstOrCreate(['user_id' => $userId]);
+        return Cart::with(['items.product'])
+            ->firstOrCreate(['user_id' => $userId]);
     }
 
     /**
-     * Add item to cart
+     * Add item to cart.
      */
-    public function addItemToCart(int $userId, int $productId, int $quantity)
+    public function addItemToCart(int $userId, int $productId, int $quantity): array
     {
-        $product = Product::find($productId);
-
-        if (!$product) {
-            return ['success' => false, 'message' => 'Product not found.'];
-        }
+        $product = Product::findOrFail($productId);
 
         if ($quantity > $product->stock) {
             return ['success' => false, 'message' => 'Quantity exceeds available stock.'];
         }
 
-        $cart = $this->getUserCart($userId);
+        return DB::transaction(function () use ($userId, $product, $quantity) {
+            $cart = $this->getUserCart($userId);
 
-        $cartItem = $cart->items()->where('product_id', $productId)->first();
+            $cartItem = $cart->items()->where('product_id', $product->id)->first();
 
-        if ($cartItem) {
-            $newQuantity = $cartItem->quantity + $quantity;
+            if ($cartItem) {
+                // $newQuantity = $cartItem->quantity + $quantity;
 
-            if ($newQuantity > $product->stock) {
-                return ['success' => false, 'message' => 'Total quantity exceeds available stock.'];
+                if ($quantity > $product->stock) {
+                    return ['success' => false, 'message' => 'Total quantity exceeds available stock.'];
+                }
+
+                $cartItem->update([
+                    'quantity' => $quantity,
+                    'price'    => $product->final_price,
+                ]);
+            } else {
+                $cart->items()->create([
+                    'product_id' => $product->id,
+                    'quantity'   => $quantity,
+                    'price'      => $product->final_price,
+                ]);
             }
 
-            $cartItem->update([
-                'quantity' => $newQuantity,
-                'price'    => $product->final_price,
-            ]);
-        } else {
-            $cart->items()->create([
-                'product_id' => $productId,
-                'quantity'   => $quantity,
-                'price'      => $product->final_price,
-            ]);
-        }
+            $product->decrement('stock', $quantity);
 
-        // تحديث المخزون
-        $product->decrement('stock', $quantity);
-
-        return ['success' => true, 'message' => 'Product added to cart successfully.'];
+            return ['success' => true, 'message' => 'Product added to cart successfully.'];
+        });
     }
 
     /**
-     * Update item quantity in cart
+     * Update item quantity in cart.
      */
-    public function updateItemQuantity(int $userId, int $productId, int $quantity)
+    public function updateItemQuantity(int $userId, int $productId, int $quantity): array
     {
-        $product = Product::find($productId);
+        $product = Product::findOrFail($productId);
 
-        if (!$product) {
-            return ['success' => false, 'message' => 'Product not found.'];
+        $cart = $this->getUserCart($userId);
+        $cartItem = $cart->items()->where('product_id', $product->id)->first();
+
+        if (!$cartItem) {
+            return ['success' => false, 'message' => 'Item not found in cart.'];
         }
 
-        if ($quantity > $product->stock + $this->getCartItemQuantity($userId, $productId)) {
+        // Allow updating if quantity is within available stock + current cart item
+        if ($quantity > $product->stock) {
             return ['success' => false, 'message' => 'Requested quantity exceeds available stock.'];
         }
 
-        $cart = $this->getUserCart($userId);
+        return DB::transaction(function () use ($cartItem, $product, $quantity) {
+            $oldQuantity = $cartItem->quantity;
 
-        $cartItem = $cart->items()->where('product_id', $productId)->first();
+            $cartItem->update([
+                'quantity' => $quantity,
+                'price'    => $product->final_price,
+            ]);
 
-        if (!$cartItem) {
-            return ['success' => false, 'message' => 'Item not found in cart.'];
-        }
+            $diff = $quantity - $oldQuantity;
 
-        $oldQuantity = $cartItem->quantity;
-
-        $cartItem->update([
-            'quantity' => $quantity,
-            'price'    => $product->final_price,
-        ]);
-
-        // تحديث المخزون (لو الكمية قلت -> نرجع فرق الكمية للمخزون، لو زادت -> ننقصها)
-        $diff = $quantity - $oldQuantity;
-
-        if ($diff > 0) {
-            $product->decrement('stock', $diff);
-        } elseif ($diff < 0) {
-            $product->increment('stock', abs($diff));
-        }
-
-        return ['success' => true, 'message' => 'Cart updated successfully.'];
-    }
-
-    /**
-     * Remove item from cart
-     */
-    public function removeItemFromCart(int $userId, int $productId)
-    {
-        $cart = $this->getUserCart($userId);
-        $cartItem = $cart->items()->where('product_id', $productId)->first();
-
-        if (!$cartItem) {
-            return ['success' => false, 'message' => 'Item not found in cart.'];
-        }
-
-        // ترجيع الكمية للمخزون
-        $product = Product::find($productId);
-        if ($product) {
-            $product->increment('stock', $cartItem->quantity);
-        }
-
-        $cartItem->delete();
-
-        return ['success' => true, 'message' => 'Item removed from cart.'];
-    }
-
-    /**
-     * Clear the whole cart
-     */
-    public function clearCart(int $userId)
-    {
-        $cart = $this->getUserCart($userId);
-
-        foreach ($cart->items as $item) {
-            $product = Product::find($item->product_id);
-            if ($product) {
-                $product->increment('stock', $item->quantity);
+            if ($diff > 0) {
+                $product->decrement('stock', $diff);
+            } elseif ($diff < 0) {
+                $product->increment('stock', abs($diff));
             }
-        }
 
-        $cart->items()->delete();
-
-        return ['success' => true, 'message' => 'Cart cleared successfully.'];
+            return ['success' => true, 'message' => 'Cart updated successfully.'];
+        });
     }
 
-    private function getCartItemQuantity(int $userId, int $productId)
+    /**
+     * Remove item from cart.
+     */
+    public function removeItemFromCart(int $userId, int $productId): array
     {
         $cart = $this->getUserCart($userId);
-        return $cart->items()->where('product_id', $productId)->value('quantity') ?? 0;
+        $cartItem = $cart->items()->where('product_id', $productId)->first();
+
+        if (!$cartItem) {
+            return ['success' => false, 'message' => 'Item not found in cart.'];
+        }
+
+        return DB::transaction(function () use ($cartItem, $productId) {
+            $product = Product::find($productId);
+
+            if ($product) {
+                $product->increment('stock', $cartItem->quantity);
+            }
+
+            $cartItem->delete();
+
+            return ['success' => true, 'message' => 'Item removed from cart.'];
+        });
+    }
+
+    /**
+     * Clear the whole cart.
+     */
+    public function clearCart(int $userId): array
+    {
+        $cart = $this->getUserCart($userId);
+
+        return DB::transaction(function () use ($cart) {
+            foreach ($cart->items as $item) {
+                if ($item->product) {
+                    $item->product->increment('stock', $item->quantity);
+                }
+            }
+
+            $cart->items()->delete();
+
+            return ['success' => true, 'message' => 'Cart cleared successfully.'];
+        });
+    }
+
+    /**
+     * Get the quantity of a cart item.
+     */
+    private function getCartItemQuantity(int $userId, int $productId): int
+    {
+        $cart = $this->getUserCart($userId);
+
+        return $cart->items()
+            ->where('product_id', $productId)
+            ->value('quantity') ?? 0;
     }
 }
