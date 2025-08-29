@@ -15,17 +15,23 @@ class EnsureSingleSession
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response {
-        if (Auth::check()) {
-            $user = Auth::user();
-            // If the current session is not the same as the one stored in the DB → Logout
-            if ($user->session_id !== Session::getId()) {
-                Auth::logout();
-                return redirect()->route('Auth.login')->withErrors([
-                    'email' => 'You are already logged in from another device. Please log out from that device first.',
-                ]);
-            }
+    public function handle(Request $request, Closure $next): Response
+{
+    if (Auth::check()) {
+        $user = Auth::user();
+
+        if ($user->session_id !== Session::getId()) {
+            Auth::logout();
+            Session::invalidate();
+            Session::regenerateToken();
+
+            return redirect()->route('Auth.login')->withErrors([
+                'email' => 'Your session has expired because you logged in from another device.',
+            ]);
         }
-        return $next($request);
     }
+
+    return $next($request);
+}
+
 }

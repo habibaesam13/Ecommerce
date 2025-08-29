@@ -18,30 +18,39 @@ class CartService
     }
 
     /**
-     * Add item to cart.
+     * Add item to cart (with row lock to avoid race conditions).
      */
     public function addItemToCart(int $userId, int $productId, int $quantity): array
     {
-        $product = Product::findOrFail($productId);
+        return DB::transaction(function () use ($userId, $productId, $quantity) {
+            // Lock product row so only one user can modify stock at a time
+            $product = Product::where('id', $productId)->lockForUpdate()->firstOrFail();
 
-        if ($quantity > $product->stock) {
-            return ['success' => false, 'message' => 'Quantity exceeds available stock.'];
-        }
+            if ($quantity > $product->stock) {
+                return ['success' => false, 'message' => 'Quantity exceeds available stock.'];
+            }
 
-        return DB::transaction(function () use ($userId, $product, $quantity) {
             $cart = $this->getUserCart($userId);
-
             $cartItem = $cart->items()->where('product_id', $product->id)->first();
 
             if ($cartItem) {
-                // $newQuantity = $cartItem->quantity + $quantity;
+                
+                $newQuantity = $cartItem->quantity + $quantity;
 
-                if ($quantity > $product->stock) {
+                if ($newQuantity > $product->stock + $cartItem->quantity) {
                     return ['success' => false, 'message' => 'Total quantity exceeds available stock.'];
                 }
 
+                // Adjust stock difference
+                $diff = $newQuantity - $cartItem->quantity;
+                if ($diff > 0) {
+                    $product->decrement('stock', $diff);
+                } elseif ($diff < 0) {
+                    $product->increment('stock', abs($diff));
+                }
+
                 $cartItem->update([
-                    'quantity' => $quantity,
+                    'quantity' => $newQuantity,
                     'price'    => $product->final_price,
                 ]);
             } else {
@@ -50,9 +59,9 @@ class CartService
                     'quantity'   => $quantity,
                     'price'      => $product->final_price,
                 ]);
-            }
 
-            $product->decrement('stock', $quantity);
+                $product->decrement('stock', $quantity);
+            }
 
             return ['success' => true, 'message' => 'Product added to cart successfully.'];
         });
@@ -63,22 +72,23 @@ class CartService
      */
     public function updateItemQuantity(int $userId, int $productId, int $quantity): array
     {
-        $product = Product::findOrFail($productId);
+        return DB::transaction(function () use ($userId, $productId, $quantity) {
+            $cart = $this->getUserCart($userId);
+            $cartItem = $cart->items()->where('product_id', $productId)->first();
 
-        $cart = $this->getUserCart($userId);
-        $cartItem = $cart->items()->where('product_id', $product->id)->first();
+            if (!$cartItem) {
+                return ['success' => false, 'message' => 'Item not found in cart.'];
+            }
 
-        if (!$cartItem) {
-            return ['success' => false, 'message' => 'Item not found in cart.'];
-        }
+            // Lock product row
+            $product = Product::where('id', $productId)->lockForUpdate()->firstOrFail();
 
-        // Allow updating if quantity is within available stock + current cart item
-        if ($quantity > $product->stock) {
-            return ['success' => false, 'message' => 'Requested quantity exceeds available stock.'];
-        }
-
-        return DB::transaction(function () use ($cartItem, $product, $quantity) {
             $oldQuantity = $cartItem->quantity;
+
+            // Check stock considering current reserved amount
+            if ($quantity > ($product->stock + $oldQuantity)) {
+                return ['success' => false, 'message' => 'Requested quantity exceeds available stock.'];
+            }
 
             $cartItem->update([
                 'quantity' => $quantity,
@@ -102,15 +112,16 @@ class CartService
      */
     public function removeItemFromCart(int $userId, int $productId): array
     {
-        $cart = $this->getUserCart($userId);
-        $cartItem = $cart->items()->where('product_id', $productId)->first();
+        return DB::transaction(function () use ($userId, $productId) {
+            $cart = $this->getUserCart($userId);
+            $cartItem = $cart->items()->where('product_id', $productId)->first();
 
-        if (!$cartItem) {
-            return ['success' => false, 'message' => 'Item not found in cart.'];
-        }
+            if (!$cartItem) {
+                return ['success' => false, 'message' => 'Item not found in cart.'];
+            }
 
-        return DB::transaction(function () use ($cartItem, $productId) {
-            $product = Product::find($productId);
+            // Lock product row
+            $product = Product::where('id', $productId)->lockForUpdate()->first();
 
             if ($product) {
                 $product->increment('stock', $cartItem->quantity);
@@ -127,12 +138,16 @@ class CartService
      */
     public function clearCart(int $userId): array
     {
-        $cart = $this->getUserCart($userId);
+        return DB::transaction(function () use ($userId) {
+            $cart = $this->getUserCart($userId);
 
-        return DB::transaction(function () use ($cart) {
             foreach ($cart->items as $item) {
                 if ($item->product) {
-                    $item->product->increment('stock', $item->quantity);
+                    // Lock each product before increment
+                    $product = Product::where('id', $item->product_id)->lockForUpdate()->first();
+                    if ($product) {
+                        $product->increment('stock', $item->quantity);
+                    }
                 }
             }
 

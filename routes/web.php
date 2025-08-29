@@ -4,8 +4,12 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CheckoutContoller;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\OTPLogicController;
 use App\Http\Middleware\EnsureSingleSession;
@@ -16,7 +20,7 @@ Route::get('/', function () {
 });
 Route::get("/login", function () {
     return view("Auth.login");
-})->name("Auth.login");
+})->name("login");
 Route::post('/login', [AuthController::class, 'login'])->name("auth.login");
 
 Route::get("/register", function () {
@@ -53,6 +57,19 @@ Route::middleware(['auth', 'single.session'])->group(function () {
     Route::post('/cart/add/{productId}', [CartController::class, 'add'])->name('cart.add');
     Route::patch('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove/{productId}', [CartController::class, 'delete'])->name('cart.delete');
+
+
+    //order routes
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
+    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+    // Checkout page for stripe payment (see below)
+    Route::get('/checkout/{order}', [CheckoutController::class, 'show'])->name('checkout.show');
+    Route::get('/checkout/success', function () {
+        return view('checkout.success');
+    })->name('checkout.success');
+    Route::post('/stripe/webhook', [WebhookController::class, 'handle'])->name('stripe.webhook');
 });
 
 //Admin Routes
