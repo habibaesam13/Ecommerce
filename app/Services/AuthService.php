@@ -37,25 +37,28 @@ class AuthService
      * Handle user login
      */
     public function login(array $data)
-    {
-        if (Auth::attempt($data)) {
-            $user = Auth::user();
+{
+    if (Auth::attempt($data)) {
+        $user = Auth::user();
 
-            if ($user->session_id && $user->session_id !== Session::getId()) {
-                Session::getHandler()->destroy($user->session_id);
-            }
-
-            session()->regenerate();
-
-
-            $user->session_id = Session::getId();
-            $user->save();
-
-            return $user;
+        // If user already has a session, destroy it
+        if ($user->session_id && $user->session_id !== Session::getId()) {
+            Session::getHandler()->destroy($user->session_id);
         }
 
-        return null;
+        // Regenerate for security
+        session()->regenerate();
+
+        // Save new session ID
+        $user->session_id = Session::getId();
+        $user->save();
+
+        return $user;
     }
+
+    return null;
+}
+
 
     /**
      * Handle user logout

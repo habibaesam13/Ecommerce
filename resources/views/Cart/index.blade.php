@@ -72,16 +72,16 @@
                 @endforeach
             </div>
         </div>
-        <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
-    <div id="liveToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-            <div id="toast-body" class="toast-body">
-                <!-- Message will be inserted here -->
+        <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 9999;">
+            <div id="liveToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div id="toast-body" class="toast-body"></div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
             </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-    </div>
-</div>
+
+
 
 
         <!-- Summary -->
@@ -101,9 +101,19 @@
                     <span class="fw-bold">Total</span>
                     <span class="fw-bold">${{ number_format($cart->items->sum(fn($i) => $i->price * $i->quantity), 2) }}</span>
                 </div>
-                <a href="#" class="btn btn-dark w-100 rounded-pill py-2">
-                    Proceed to Checkout
-                </a>
+                <form action="{{ route('orders.store') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label class="form-label">Payment Method</label>
+                        <select name="payment_method" class="form-control">
+                            <option value="cash">Cash on Delivery</option>
+                            <option value="visa">Pay with Visa (Stripe)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-dark w-100 rounded-pill py-2">Place Order</button>
+                </form>
+
+
             </div>
         </div>
     </div>
@@ -123,24 +133,26 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         @if(session('success'))
-            showToast("{{ session('success') }}", "bg-success");
+        showToast("{{ session('success') }}", "bg-success");
         @endif
 
         @if(session('error'))
-            showToast("{{ session('error') }}", "bg-danger");
+        showToast("{{ session('error') }}", "bg-danger");
         @endif
     });
 
     function showToast(message, bgClass) {
         const toastEl = document.getElementById('liveToast');
         const toastBody = document.getElementById('toast-body');
-        
-        toastEl.className = `toast align-items-center text-white ${bgClass} border-0`; 
+
+        toastEl.className = `toast align-items-center text-white ${bgClass} border-0`;
         toastBody.innerText = message;
 
-        const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+        const toast = new bootstrap.Toast(toastEl, {
+            delay: 3000
+        });
         toast.show();
     }
 </script>

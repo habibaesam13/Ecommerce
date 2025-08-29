@@ -26,7 +26,7 @@
         <div class="nav-links">
             <a href="{{ route('home') }}">Home</a>
             <a href="{{ route('products.index') }}">Products</a>
-            <a href="#">My Orders</a>
+            <a href="{{ route('orders.index') }}">My Orders</a>
             <a href="#">About</a>
             <a href="#">Contact Us</a>
         </div>
@@ -34,13 +34,13 @@
 
         <!-- Search bar -->
         <div class="search-container">
-    <form action="{{ route('products.index') }}" method="GET" class="search-form">
-        <input type="text" name="q" value="{{ request('q') }}" placeholder="Search..." class="search-input">
-        <button type="submit" class="search-btn">
-            <i class="fas fa-search"></i>
-        </button>
-    </form>
-</div>
+            <form action="{{ route('products.index') }}" method="GET" class="search-form">
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="Search..." class="search-input">
+                <button type="submit" class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
 
 
 
@@ -49,7 +49,15 @@
         <div class="nav-icons">
             <a href="{{ route('favourites.index') }}"><i class="fas fa-heart"></i></a>
             <a href="{{ route('cart.index') }}"><i class="fas fa-shopping-cart"></i></a>
-            <a href="#"><i class="fas fa-user"></i> <span>{{ Auth::user()->short_name}}</span></a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="fas fa-user"></i>
+                <span>{{ Auth::user()->short_name }}</span>
+            </a>
+
         </div>
     </nav>
     <div>
