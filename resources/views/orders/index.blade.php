@@ -1,65 +1,65 @@
 @extends('layout')
-
+<link href="{{ asset('css/orders.css') }}" rel="stylesheet">
 @section('title', 'My Orders')
 
 @section('content')
 <div class="container my-4">
-    <h2 class="mb-3">My Orders</h2>
+    <h2 class="mb-3 text-center">My Orders</h2>
+    @if($ordersByMonth->isEmpty())
+    <div class="no-order align-items-center text-center py-5 m w-50 mx-auto">
+        <i class="fa-solid fa-receipt"></i>
+        <p class="main">No orders yet</p>
+        <p class="text-muted">Browse Products and start ordering</p>
+        <p class="text-muted">Delivery is free for orders over 2000 EGP</p>
+        <a href="{{ route('products.index') }}" class="btn btn-dark rounded-pill px-5 mt-4">
+            Shop Now
+        </a>
+    </div>
+        
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    @if($orders->isEmpty())
-        <p>No orders yet.</p>
     @else
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>#ID</th>
-                    <th>Items</th>
-                    <th>Total (EGP)</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($orders as $order)
-                    <tr>
-                        <td>{{ $order->id }}</td>
-                        <td>
-                            @php $items = json_decode($order->items, true); @endphp
-                            <ul>
-                                @foreach ($items as $item)
-                                    <li>{{ $item['name'] }} (x{{ $item['quantity'] }}) - {{ $item['total'] }} EGP</li>
-                                @endforeach
-                            </ul>
-                        </td>
-                        <td>{{ $order->total }} EGP</td>
-                        <td>
-                            <form action="{{ route('orders.update', $order) }}" method="POST" class="d-flex">
-                                @csrf
-                                @method('PUT')
-                                <select name="status" class="form-select me-2">
-                                    <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Processing</option>
-                                    <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>Completed</option>
-                                    <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                                </select>
-                                <button class="btn btn-sm btn-primary">Update</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form action="{{ route('orders.destroy', $order) }}" method="POST" onsubmit="return confirm('Are you sure?')">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-sm btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+        @foreach($ordersByMonth as $month => $orders)
+            <h4 class="mt-4">{{ $month }} <small class="text-muted">{{ $orders->count() }} Orders</small></h4>
+            @foreach($orders as $order)
+                @php $items = json_decode($order->items, true); @endphp
+                <a href="{{ route('orders.show', $order) }}" class="stretched-link"></a>
+                <div class="card mb-3 shadow-sm w-75 mx-auto">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="mb-1">Order #{{ $order->id }}</h6>
+                            <small class="mt-4">{{ $order->created_at->format('M d, Y | H:i') }}</small>
+                        </div>
+
+                        {{-- Products preview --}}
+                        <div class="d-flex align-items-center my-2">
+                            @foreach(array_slice($items, 0, 5) as $item)
+                                <img src="{{ "storage/".$item['image'] ?? asset('images/default.png') }}" 
+                                     alt="{{ $item['name'] }}" 
+                                     class="rounded me-1" 
+                                     width="40" height="40">
+                            @endforeach
+                            @if(count($items) > 5)
+                                <span class="badge bg-secondary">+{{ count($items) - 5 }}</span>
+                            @endif
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <span><strong>{{ count($items) }}</strong> Products</span>
+                            <span><strong>{{ number_format($order->amount, 2) }}</strong> EGP</span>
+                        </div>
+
+                        <form action="{{ route('orders.destroy', $order) }}" method="POST"
+                        class="position-absolute top-0 end-0 m-2">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-light text-danger rounded-circle shadow-sm" title="Remove">
+                            <i class="fa-solid fa-trash" style="font-size: 1rem;"></i>
+                        </button>
+                    </form>
+                    </div>
+                </div>
+            @endforeach
+        @endforeach
     @endif
 </div>
 @endsection

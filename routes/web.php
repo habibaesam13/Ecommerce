@@ -62,8 +62,10 @@ Route::middleware(['auth', 'single.session'])->group(function () {
     //order routes
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
     Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+
     // Checkout page for stripe payment (see below)
     Route::get('/checkout/{order}', [CheckoutController::class, 'show'])->name('checkout.show');
     Route::get('/checkout/success', function () {

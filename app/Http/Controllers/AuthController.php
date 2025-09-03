@@ -31,6 +31,12 @@ class AuthController extends Controller
 
         $user = $this->authService->login($credentials);
 
+        if (! $user) {
+            return back()->withErrors([
+                'email' => 'Invalid email or password',
+            ])->withInput();
+        }
+
         return $user->role === "customer"
             ? redirect()->route("home")->with('success', 'Logged in successfully')
             : redirect()->route("AdminDashboard");

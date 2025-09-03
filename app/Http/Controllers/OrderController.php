@@ -45,10 +45,15 @@ class OrderController extends Controller
     }
 
 
-     public function index()
+    public function index()
     {
-        $orders = $this->orderService->getUserOrders();
-        return view('orders.index', compact('orders'));
+        $ordersByMonth = $this->orderService->getUserOrders();
+        return view('orders.index', compact('ordersByMonth'));
+    }
+    public function show($id)
+    {
+        $order = $this->orderService->getOrderById($id);
+        return view('orders.show', compact('order'));
     }
 
     public function update(Request $request, $id)
