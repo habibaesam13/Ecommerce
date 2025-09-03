@@ -16,15 +16,17 @@
         </a>
     </div>
         
-
     @else
         @foreach($ordersByMonth as $month => $orders)
-            <h4 class="mt-4">{{ $month }} <small class="text-muted">{{ $orders->count() }} Orders</small></h4>
+            <h4 class="mt-4 p-2 d-flex justify-content-between align-items-center">{{ $month }} <small class="text-muted">{{ $orders->count() }} Orders</small></h4>
             @foreach($orders as $order)
                 @php $items = json_decode($order->items, true); @endphp
-                <a href="{{ route('orders.show', $order) }}" class="stretched-link"></a>
-                <div class="card mb-3 shadow-sm w-75 mx-auto">
+                
+                <div class="card mb-3 shadow-sm w-75 position-relative">
+                    <!-- Move the stretched link inside card-body -->
                     <div class="card-body">
+                        <a href="{{ route('orders.show', $order) }}" class="stretched-link"></a>
+                        
                         <div class="d-flex justify-content-between">
                             <h6 class="mb-1">Order #{{ $order->id }}</h6>
                             <small class="mt-4">{{ $order->created_at->format('M d, Y | H:i') }}</small>
@@ -47,16 +49,19 @@
                             <span><strong>{{ count($items) }}</strong> Products</span>
                             <span><strong>{{ number_format($order->amount, 2) }}</strong> EGP</span>
                         </div>
+                    </div>
 
-                        <form action="{{ route('orders.destroy', $order) }}" method="POST"
-                        class="position-absolute top-0 end-0 m-2">
+                    <form action="{{ route('orders.destroy', $order) }}" method="POST"
+                          class="position-absolute top-0 end-0 m-2"
+                          style="z-index: 10;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-light text-danger rounded-circle shadow-sm" title="Remove">
+                        <button type="submit" 
+                                class="btn btn-sm btn-light text-danger rounded-circle shadow-sm position-relative" 
+                                title="Remove">
                             <i class="fa-solid fa-trash" style="font-size: 1rem;"></i>
                         </button>
                     </form>
-                    </div>
                 </div>
             @endforeach
         @endforeach
