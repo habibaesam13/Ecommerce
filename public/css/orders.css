@@ -1,0 +1,32 @@
+h2{
+    font-family: "Luckiest Guy",sans-serif;
+}
+.no-order{
+    font-family: 'Neuzeit S-regular', sans-serif;
+    background-color: #fff;
+    padding: 5%;
+    margin-top: 25px;
+    border: none;
+    border-radius: 25px;
+}
+
+.no-order i{
+    font-size: 5rem;
+    color: black;
+}
+.no-order p{
+    margin: 0 !important;
+}
+.main{
+    margin-top: 2rem;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+
+.card{
+    margin: 10px !important;
+    border: none !important;
+    border-radius: 0 !important;
+    border-bottom: #000 solid 1px !important;
+}

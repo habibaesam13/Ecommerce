@@ -10,47 +10,77 @@ use Illuminate\Support\Facades\Auth;
 class OrderService
 {
     public function createOrder($paymentMethod)
-    {
-        return DB::transaction(function () use ($paymentMethod) {
-            $cart = Auth::user()->cart;
+{
+    return DB::transaction(function () use ($paymentMethod) {
+        $cart = Auth::user()->cart;
 
-            if (!$cart || $cart->items->isEmpty()) {
-                throw new \Exception("Cart is empty");
-            }
+        if (!$cart || $cart->items->isEmpty()) {
+            throw new \Exception("Cart is empty");
+        }
 
-            $items = $cart->items->map(function ($item) {
-                return [
-                    'product_id' => $item->product_id,
-                    'name'       => $item->product->name,
-                    'quantity'   => $item->quantity,
-                    'price'      => $item->price,
-                    'total'      => $item->price * $item->quantity,
-                ];
-            })->toArray();
+        $order = Order::where('user_id', Auth::id())
+            ->where('status', 'pending')
+            ->first();
 
+        if (!$order) {
             $order = Order::create([
                 'user_id' => Auth::id(),
-                'total'   => $cart->total, // use accessor from Cart model
+                'total'   => 0, 
                 'status'  => 'pending',
-                'items'   => json_encode($items),
+                'items'   => json_encode([]),
+                'amount'  => 0,
                 'payment_method' => $paymentMethod,
             ]);
+        }
 
-            foreach ($cart->items as $cartItem) {
+        $existingItems = json_decode($order->items, true) ?? [];
+
+        foreach ($cart->items as $cartItem) {
+            $existingIndex = collect($existingItems)->search(fn($i) => $i['product_id'] == $cartItem->product_id);
+
+            if ($existingIndex !== false) {
+                $existingItems[$existingIndex]['quantity'] += $cartItem->quantity;
+                $existingItems[$existingIndex]['total'] = $existingItems[$existingIndex]['quantity'] * $existingItems[$existingIndex]['price'];
+
+                $orderItem = $order->orderItems()->where('product_id', $cartItem->product_id)->first();
+                if ($orderItem) {
+                    $orderItem->increment('quantity', $cartItem->quantity);
+                }
+            } else {
+                $newItem = [
+                    'product_id' => $cartItem->product_id,
+                    'name'       => $cartItem->product->name,
+                    'quantity'   => $cartItem->quantity,
+                    'price'      => $cartItem->price,
+                    'image'      => $cartItem->product->img,
+                    'total'      => $cartItem->price * $cartItem->quantity,
+                ];
+                $existingItems[] = $newItem;
                 $order->orderItems()->create([
                     'product_id' => $cartItem->product_id,
                     'quantity'   => $cartItem->quantity,
                     'price'      => $cartItem->price,
                 ]);
             }
+        }
+        $newTotal = collect($existingItems)->sum('total');
 
-            $cart->items()->delete();
-            $cart->delete();
-            return $order;
-        });
+        $order->update([
+            'items'  => json_encode($existingItems),
+            'total'  => $newTotal,
+            'amount' => $newTotal,
+            'payment_method' => $paymentMethod,
+        ]);
+        $cart->items()->delete();
+        return $order;
+    });
+}
+public function getOrderById($orderId)
+    {
+        return Order::where('user_id', Auth::id())->with('orderItems')->findOrFail($orderId);
     }
 
-     public function updateOrder($orderId, $data)
+    public function updateOrder($orderId, $data)
     {
         return DB::transaction(function () use ($orderId, $data) {
             $order = Order::where('user_id', Auth::id())->findOrFail($orderId);
@@ -86,6 +116,11 @@ class OrderService
 
     public function getUserOrders()
     {
-        return Order::where('user_id', Auth::id())->latest()->get();
+        return Order::where('user_id', Auth::id())
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->groupBy(function ($order) {
+            return $order->created_at->format('F Y'); 
+        });
     }
 }
