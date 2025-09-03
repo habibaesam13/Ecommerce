@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderService
 {
-    public function createOrder($paymentMethod)
+public function createOrder($paymentMethod)
 {
     return DB::transaction(function () use ($paymentMethod) {
         $cart = Auth::user()->cart;
@@ -24,11 +24,11 @@ class OrderService
 
         if (!$order) {
             $order = Order::create([
-                'user_id' => Auth::id(),
-                'total'   => 0, 
-                'status'  => 'pending',
-                'items'   => json_encode([]),
-                'amount'  => 0,
+                'user_id'        => Auth::id(),
+                'total'          => 0, 
+                'status'         => 'pending',
+                'items'          => json_encode([]),
+                'amount'         => 0,
                 'payment_method' => $paymentMethod,
             ]);
         }
@@ -39,12 +39,20 @@ class OrderService
             $existingIndex = collect($existingItems)->search(fn($i) => $i['product_id'] == $cartItem->product_id);
 
             if ($existingIndex !== false) {
+                
                 $existingItems[$existingIndex]['quantity'] += $cartItem->quantity;
                 $existingItems[$existingIndex]['total'] = $existingItems[$existingIndex]['quantity'] * $existingItems[$existingIndex]['price'];
 
+                
                 $orderItem = $order->orderItems()->where('product_id', $cartItem->product_id)->first();
                 if ($orderItem) {
-                    $orderItem->increment('quantity', $cartItem->quantity);
+                    $newQuantity = $orderItem->quantity + $cartItem->quantity;
+                    $newTotal    = $newQuantity * $orderItem->price;
+
+                    $orderItem->update([
+                        'quantity' => $newQuantity,
+                        'total'    => $newTotal,
+                    ]);
                 }
             } else {
                 $newItem = [
@@ -56,25 +64,32 @@ class OrderService
                     'total'      => $cartItem->price * $cartItem->quantity,
                 ];
                 $existingItems[] = $newItem;
+
                 $order->orderItems()->create([
                     'product_id' => $cartItem->product_id,
                     'quantity'   => $cartItem->quantity,
                     'price'      => $cartItem->price,
+                    'total'      => $cartItem->price * $cartItem->quantity,
                 ]);
             }
         }
+
+        // Recalculate total order amount
         $newTotal = collect($existingItems)->sum('total');
 
         $order->update([
-            'items'  => json_encode($existingItems),
-            'total'  => $newTotal,
-            'amount' => $newTotal,
+            'items'          => json_encode($existingItems),
+            'total'          => $newTotal,
+            'amount'         => $newTotal,
             'payment_method' => $paymentMethod,
         ]);
+
+        // Clear the cart
         $cart->items()->delete();
         return $order;
     });
 }
+
 public function getOrderById($orderId)
     {
         return Order::where('user_id', Auth::id())->with('orderItems')->findOrFail($orderId);

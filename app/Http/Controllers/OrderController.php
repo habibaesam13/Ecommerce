@@ -37,7 +37,7 @@ class OrderController extends Controller
                     ->with('success', 'Order created — please complete payment.');
             }
 
-            return redirect()->route('orders.show', $order)->with('success', 'Order placed (cash).');
+            return redirect()->route('orders.index', $order)->with('success', 'Order placed (cash).');
         } catch (\Throwable $e) {
             // Log error in production
             return back()->with('error', $e->getMessage());

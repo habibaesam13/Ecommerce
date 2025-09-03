@@ -30,3 +30,19 @@ h2{
     border-radius: 0 !important;
     border-bottom: #000 solid 1px !important;
 }
+/* order show page*/
+.order-header{
+    background-color: #ffffff;
+}
+.order-id{
+    font-size: 15px !important;
+    color: #E89F71;
+}
+.badge{
+    background-color: transparent !important;
+    font-weight: bold;
+    font-size: 15px !important;
+}
+.cart-items{
+    border-bottom: #000 solid 1px !important;
+}
